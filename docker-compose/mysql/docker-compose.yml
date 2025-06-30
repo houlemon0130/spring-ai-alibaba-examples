@@ -6,8 +6,8 @@ services:
     volumes:
       - ./conf/my.cnf:/etc/my.cnf
     environment:
-      - "MYSQL_ROOT_PASSWORD=yourpassword"
-      - "MYSQL_DATABASE=yourdbname"
+      - "MYSQL_ROOT_PASSWORD=root"
+      - "MYSQL_DATABASE=spring_ai_alibaba_mysql"
       - "TZ=Asia/Shanghai"
     ports:
       - 3306:3306

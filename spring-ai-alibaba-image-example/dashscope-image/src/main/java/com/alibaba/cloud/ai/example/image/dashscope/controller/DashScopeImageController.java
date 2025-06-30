@@ -78,7 +78,7 @@ public class DashScopeImageController {
 	@GetMapping("/image/multiPrompt")
 	public ResponseEntity<Collection<String>> generateImageWithMultiPrompt(
 			@RequestParam(value = "prompt", defaultValue = "一只会编程的猫") String prompt,
-			@RequestParam(defaultValue = "2") int count) {
+			@RequestParam(value = "count", defaultValue = "2") int count) {
 
 		ImageOptions options = ImageOptionsBuilder.builder()
 				.N(count)

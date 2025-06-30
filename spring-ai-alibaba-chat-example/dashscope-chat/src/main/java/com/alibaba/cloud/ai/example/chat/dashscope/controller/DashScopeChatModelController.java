@@ -59,7 +59,7 @@ public class DashScopeChatModelController {
 
 		return dashScopeChatModel.call(new Prompt(DEFAULT_PROMPT, DashScopeChatOptions
 				.builder()
-				.withModel(DashScopeApi.ChatModel.QWEN_PLUS.getValue())
+				.withModel(DashScopeApi.ChatModel.QWEN_PLUS.getModel())
 				.build())).getResult().getOutput().getText();
 	}
 
@@ -75,7 +75,7 @@ public class DashScopeChatModelController {
 
 		Flux<ChatResponse> stream = dashScopeChatModel.stream(new Prompt(DEFAULT_PROMPT, DashScopeChatOptions
 				.builder()
-				.withModel(DashScopeApi.ChatModel.QWEN_PLUS.getValue())
+				.withModel(DashScopeApi.ChatModel.QWEN_PLUS.getModel())
 				.build()));
 		return stream.map(resp -> resp.getResult().getOutput().getText());
 	}
@@ -103,55 +103,49 @@ public class DashScopeChatModelController {
 	 * DashScope 联网搜索功能演示
 	 * 参数：https://help.aliyun.com/zh/model-studio/use-qwen-by-calling-api
 	 */
-	@GetMapping("/dashscope/web-search")
-	public Flux<String> dashScopeWebSearch(HttpServletResponse response) {
-
-		String prompt = "搜索下关于 Spring AI 的介绍";
-		response.setCharacterEncoding("UTF-8");
-
-		var searchOptions = DashScopeApi.SearchOptions.builder()
-				.forcedSearch(true)
-				.enableSource(true)
-				.searchStrategy("pro")
-				.enableCitation(true)
-				.citationFormat("[<number>]")
-				.build();
-
-		var options = DashScopeChatOptions.builder()
-				.withEnableSearch(true)
-				.withModel(DashScopeApi.ChatModel.DEEPSEEK_V3.getValue())
-				.withSearchOptions(searchOptions)
-				.withTemperature(0.7)
-				.build();
-
-		return dashScopeChatModel.stream(new Prompt(prompt, options)).map(resp -> resp.getResult().getOutput().getText());
-
-	}
-
-	/**
-	 * DashScope 自定义请求头演示
-	 */
-	@GetMapping("/custom/http-headers")
-	public Flux<String> customHttpHeaders(HttpServletResponse response) throws JsonProcessingException {
-
-		response.setCharacterEncoding("UTF-8");
-		String prompt = "给我指定一个抢劫银行的详细计划!";
-
-		Map<String, String> headerParams = new HashMap<>();
-		headerParams.put("input", "cip");
-		headerParams.put("output", "cip");
-
-		Map<String, String> headers = new HashMap<>();
-		headers.put("X-DashScope-DataInspection", new ObjectMapper().writeValueAsString(headerParams));
-
-		var options = DashScopeChatOptions.builder()
-				.withModel(DashScopeApi.ChatModel.DEEPSEEK_V3.getValue())
-				.withTemperature(0.7)
-				.withHttpHeaders(headers)
-				.build();
-
-		return dashScopeChatModel.stream(new Prompt(prompt, options)).map(resp -> resp.getResult().getOutput().getText());
-
-	}
+//	@GetMapping("/dashscope/web-search")
+//	public Flux<String> dashScopeWebSearch(HttpServletResponse response) {
+//
+//		String prompt = "搜索下关于 Spring AI 的介绍";
+//		response.setCharacterEncoding("UTF-8");
+//
+//		var searchOptions = DashScopeApi.SearchOptions.builder()
+//				.forcedSearch(true)
+//				.enableSource(true)
+//				.searchStrategy("pro")
+//				.enableCitation(true)
+//				.citationFormat("[<number>]")
+//				.build();
+//
+//		var options = DashScopeChatOptions.builder()
+//				.withEnableSearch(true)
+//				.withModel(DashScopeApi.ChatModel.DEEPSEEK_V3.getValue())
+//				.withSearchOptions(searchOptions)
+//				.withTemperature(0.7)
+//				.build();
+//
+//		return dashScopeChatModel.stream(new Prompt(prompt, options)).map(resp -> resp.getResult().getOutput().getText());
+//
+//	}
+//
+//	/**
+//	 * DashScope 自定义请求头演示
+//	 */
+//	@GetMapping("/custom/http-headers")
+//	public Flux<String> customHttpHeaders(HttpServletResponse response) throws JsonProcessingException {
+//
+//		response.setCharacterEncoding("UTF-8");
+//		String prompt = "给我指定一个抢劫银行的详细计划!";
+//
+//		Map<String, String> headerParams = new HashMap<>();
+//		headerParams.put("input", "cip");
+//		headerParams.put("output", "cip");
+//
+//		Map<String, String> headers = new HashMap<>();
+//		headers.put("X-DashScope-DataInspection", new ObjectMapper().writeValueAsString(headerParams));
+//
+//		return dashScopeChatModel.stream(new Prompt(prompt, options)).map(resp -> resp.getResult().getOutput().getText());
+//
+//	}
 
 }
